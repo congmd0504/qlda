@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz On Tap - Quan Ly Du An</title>
+  <meta name="description" content="On tap trac nghiem mon Quan Ly Du An - 131 cau hoi 7 phan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #3b6fd4; --primary-dark: #2d57b0; --primary-light: #eef2fd;
+      --success: #16a34a; --success-light: #dcfce7;
+      --danger: #dc2626; --danger-light: #fee2e2;
+      --warning: #d97706; --warning-light: #fef3c7;
+      --n100: #f1f5f9; --n200: #e2e8f0; --n300: #cbd5e1;
+      --n400: #94a3b8; --n500: #64748b; --n600: #475569; --n700: #334155; --n800: #1e293b;
+      --sw: 260px; --rad: 10px;
+      --sh: 0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+      --sh2: 0 1px 3px rgba(0,0,0,.08); --tr: .18s ease;
+    }
+    html { font-size: 16px; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--n100); color: var(--n800); min-height: 100vh; display: flex; flex-direction: column; }
+    header { background:#fff; border-bottom:1px solid var(--n200); padding:0 1.25rem; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:var(--sh2); }
+    .hl { display:flex; align-items:center; gap:.75rem; }
+    .logo { width:32px; height:32px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:14px; flex-shrink:0; }
+    .htitle { font-weight:700; font-size:1rem; }
+    .hsub { font-size:.75rem; color:var(--n500); }
+    .hprog { display:flex; align-items:center; gap:.5rem; font-size:.8rem; color:var(--n500); font-weight:500; }
+    .dots { display:flex; gap:4px; }
+    .dot { width:8px; height:8px; border-radius:50%; background:var(--n200); transition:var(--tr); }
+    .dot.done { background:var(--success); }
+    .dot.active { background:var(--primary); }
+    .mnu { display:none; background:none; border:none; cursor:pointer; padding:6px; border-radius:6px; color:var(--n600); font-size:1.25rem; }
+    .ab { display:flex; flex:1; }
+    .sb { width:var(--sw); background:#fff; border-right:1px solid var(--n200); padding:1rem .75rem; flex-shrink:0; overflow-y:auto; position:sticky; top:56px; height:calc(100vh - 56px); }
+    .slbl { font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--n400); padding:0 .5rem .5rem; }
+    .plist { list-style:none; display:flex; flex-direction:column; gap:3px; }
+    .pb { width:100%; text-align:left; background:none; border:none; cursor:pointer; padding:.6rem .75rem; display:flex; align-items:center; gap:.65rem; border-radius:8px; transition:background var(--tr); font-family:inherit; font-size:.875rem; color:var(--n700); }
+    .pb:hover:not(:disabled) { background:var(--n100); }
+    .pb.act { background:var(--primary-light); color:var(--primary); font-weight:600; }
+    .pb:disabled { cursor:not-allowed; color:var(--n400); }
+    .pico { font-size:1rem; flex-shrink:0; width:20px; text-align:center; }
+    .pinfo { flex:1; min-width:0; }
+    .pname { font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .prng { font-size:.72rem; color:var(--n400); margin-top:1px; }
+    .pb.act .prng { color:var(--primary); opacity:.7; }
+    .mprog { height:3px; background:var(--n200); border-radius:99px; margin:2px .75rem 4px; }
+    .mbar { height:100%; border-radius:99px; background:var(--primary); transition:width .3s ease; }
+    .sbo { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:90; }
+    main { flex:1; padding:1.5rem 1.25rem; max-width:800px; margin:0 auto; width:100%; }
+    .ph { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.25rem; gap:1rem; }
+    .ph h2 { font-size:1.125rem; font-weight:700; }
+    .ph p { font-size:.8rem; color:var(--n500); margin-top:2px; }
+    .bsh { display:flex; align-items:center; gap:.4rem; background:none; border:1.5px solid var(--n300); border-radius:8px; padding:.45rem .85rem; font-family:inherit; font-size:.8rem; font-weight:500; color:var(--n600); cursor:pointer; transition:all var(--tr); white-space:nowrap; flex-shrink:0; }
+    .bsh:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+    .pw { background:#fff; border-radius:var(--rad); padding:.9rem 1rem; margin-bottom:1rem; box-shadow:var(--sh2); }
+    .pi2 { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; }
+    .ptxt2 { font-size:.82rem; font-weight:600; color:var(--n700); }
+    .pans { font-size:.78rem; color:var(--n400); }
+    .pbg { height:6px; background:var(--n200); border-radius:99px; overflow:hidden; }
+    .pf { height:100%; background:var(--primary); border-radius:99px; transition:width .3s ease; }
+    .qcard { background:#fff; border-radius:var(--rad); box-shadow:var(--sh); padding:1.5rem; margin-bottom:1rem; }
+    .qmeta { display:flex; align-items:center; gap:.5rem; margin-bottom:.85rem; }
+    .qn { background:var(--primary-light); color:var(--primary); font-size:.75rem; font-weight:700; padding:.2rem .55rem; border-radius:99px; }
+    .qb { font-size:.7rem; font-weight:600; padding:.2rem .5rem; border-radius:99px; }
+    .qb.mc { background:#ede9fe; color:#7c3aed; }
+    .qb.tf { background:#fef9c3; color:#92400e; }
+    .qtxt { font-size:1.05rem; font-weight:600; line-height:1.6; margin-bottom:1.1rem; }
+    .arev { display:none; background:var(--primary-light); border:1px solid #bfdbfe; border-radius:8px; padding:.65rem 1rem; font-size:.875rem; color:var(--primary-dark); font-weight:500; margin-bottom:1rem; align-items:center; gap:.5rem; }
+    .arev.show { display:flex; }
+    .og { display:flex; flex-direction:column; gap:.65rem; }
+    .ob { width:100%; text-align:left; background:#fff; border:1.5px solid var(--n200); border-radius:9px; padding:.8rem 1rem; cursor:pointer; font-family:inherit; font-size:.9375rem; color:var(--n700); display:flex; align-items:flex-start; gap:.75rem; transition:all var(--tr); line-height:1.5; }
+    .ob:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-light); color:var(--primary); }
+    .ok { flex-shrink:0; width:26px; height:26px; border:1.5px solid var(--n300); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; color:var(--n500); transition:all var(--tr); }
+    .ob:hover:not(:disabled) .ok { border-color:var(--primary); background:var(--primary); color:#fff; }
+    .ob.correct { border-color:var(--success); background:var(--success-light); color:var(--success); }
+    .ob.correct .ok { border-color:var(--success); background:var(--success); color:#fff; }
+    .ob.wrong { border-color:var(--danger); background:var(--danger-light); color:var(--danger); }
+    .ob.wrong .ok { border-color:var(--danger); background:var(--danger); color:#fff; }
+    .ob.hc { border-color:var(--success); background:var(--success-light); color:var(--success); }
+    .ob.hc .ok { border-color:var(--success); background:var(--success); color:#fff; }
+    .ob:disabled { cursor:default; }
+    .tg { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin-top:.25rem; }
+    .tb { border:1.5px solid var(--n200); border-radius:9px; padding:1rem; cursor:pointer; font-family:inherit; font-size:1rem; font-weight:600; display:flex; flex-direction:column; align-items:center; gap:.35rem; transition:all var(--tr); background:#fff; color:var(--n600); }
+    .tb:hover:not(:disabled) { border-color:var(--primary); background:var(--primary-light); color:var(--primary); }
+    .tbi { font-size:1.5rem; }
+    .tb.correct { border-color:var(--success); background:var(--success-light); color:var(--success); }
+    .tb.wrong { border-color:var(--danger); background:var(--danger-light); color:var(--danger); }
+    .tb.hc { border-color:var(--success); background:var(--success-light); color:var(--success); }
+    .tb:disabled { cursor:default; }
+    .fb { display:none; align-items:center; gap:.5rem; border-radius:8px; padding:.65rem 1rem; font-size:.875rem; font-weight:600; margin-top:.85rem; }
+    .fb.show { display:flex; }
+    .fb.ok2 { background:var(--success-light); color:var(--success); }
+    .fb.no { background:var(--danger-light); color:var(--danger); }
+    .acbar { background:#fff; border-radius:var(--rad); box-shadow:var(--sh2); padding:.85rem 1rem; display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; border-radius:8px; border:none; cursor:pointer; font-family:inherit; font-size:.875rem; font-weight:600; transition:all var(--tr); white-space:nowrap; }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
+    .bs2 { background:var(--n100); color:var(--n600); border:1.5px solid var(--n200); }
+    .bs2:hover:not(:disabled) { background:var(--n200); }
+    .bp { background:var(--primary); color:#fff; }
+    .bp:hover:not(:disabled) { background:var(--primary-dark); }
+    .ba { background:var(--warning-light); color:var(--warning); border:1.5px solid #fcd34d; }
+    .ba:hover:not(:disabled) { background:#fde68a; }
+    .bd { background:var(--success-light); color:var(--success); border:1.5px solid #86efac; margin-left:auto; }
+    .bd:hover:not(:disabled) { background:#bbf7d0; }
+    .cel { display:none; background:var(--success-light); border:1.5px solid #86efac; border-radius:var(--rad); padding:1rem 1.25rem; text-align:center; margin-bottom:1rem; animation:fi .4s ease; }
+    .cel.show { display:block; }
+    .cel h3 { color:var(--success); font-size:1.1rem; margin-bottom:.25rem; }
+    .cel p { color:var(--n600); font-size:.875rem; }
+    @keyframes fi { from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes pu { 0%,100%{transform:scale(1)}50%{transform:scale(1.04)} }
+    .bd.pulse { animation:pu .6s ease; }
+    @media(max-width:768px){
+      .mnu{display:flex;align-items:center;justify-content:center}
+      .hsub{display:none}
+      .sb{position:fixed;top:0;left:0;height:100vh;z-index:95;transform:translateX(-100%);transition:transform .25s ease}
+      .sb.open{transform:translateX(0)}
+      .sbo.show{display:block}
+      main{padding:1rem .75rem}
+      .ph{flex-direction:column;gap:.5rem;align-items:flex-start}
+      .acbar{gap:.45rem}
+      .btn{padding:.55rem .85rem;font-size:.82rem}
+      .bd{margin-left:0;width:100%;justify-content:center;margin-top:.35rem}
+      .qtxt{font-size:.975rem}
+    }
+    @media(max-width:380px){
+      .acbar{flex-direction:column}
+      .btn{width:100%;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="hl">
+    <button class="mnu" id="mnu">&#9776;</button>
+    <div class="logo">Q</div>
+    <div>
+      <div class="htitle">Quiz &#212;n T&#7853;p</div>
+      <div class="hsub">Qu&#7843;n L&yacute; D&#7921; &Aacute;n</div>
+    </div>
+  </div>
+  <div class="hprog">
+    <span id="otxt">0/7 ph&#7847;n</span>
+    <div class="dots" id="dots"></div>
+  </div>
+</header>
+<div class="sbo" id="sbo"></div>
+<div class="ab">
+  <nav class="sb" id="sb">
+    <div class="slbl">C&aacute;c ph&#7847;n &#244;n t&#7853;p</div>
+    <ul class="plist" id="pl"></ul>
+  </nav>
+  <main>
+    <div class="ph">
+      <div><h2 id="ptitle">Ph&#7847;n 1</h2><p id="psub">C&acirc;u 1-20</p></div>
+      <button class="bsh" id="bsh">&#128256; X&aacute;o tr&#7897;n</button>
+    </div>
+    <div class="cel" id="cel">
+      <h3>&#127881; B&#7841;n &#273;&atilde; ho&agrave;n th&agrave;nh ph&#7847;n n&agrave;y!</h3>
+      <p id="celtxt">B&#7845;m &quot;&#272;&atilde; thu&#7897;c&quot; &#273;&#7875; m&#7903; kh&oacute;a ph&#7847;n ti&#7871;p theo.</p>
+    </div>
+    <div class="pw">
+      <div class="pi2">
+        <span class="ptxt2" id="ptxt">C&acirc;u 1 / 20</span>
+        <span class="pans" id="pans">&#272;&atilde; tr&#7843; l&#7901;i: 0</span>
+      </div>
+      <div class="pbg"><div class="pf" id="pbar" style="width:0%"></div></div>
+    </div>
+    <div class="qcard">
+      <div class="qmeta">
+        <span class="qn" id="qnum">C&acirc;u 1</span>
+        <span class="qb" id="qbadge"></span>
+      </div>
+      <div class="qtxt" id="qtxt"></div>
+      <div class="arev" id="arev"><span>&#128161;</span><span id="arevt"></span></div>
+      <div id="opts"></div>
+      <div class="fb" id="fb"></div>
+    </div>
+    <div class="acbar">
+      <button class="btn bs2" id="bprev">&#9664; Quay l&#7841;i</button>
+      <button class="btn ba" id="bans">&#128065; Xem &#273;&aacute;p &aacute;n</button>
+      <button class="btn bd" id="bdone">&#9989; &#272;&atilde; thu&#7897;c ph&#7847;n n&agrave;y</button>
+      <button class="btn bp" id="bnext">Ti&#7871;p theo &#9654;</button>
+    </div>
+  </main>
+</div>
+<script>
+const DATA = {
+  "title": "Ngân hàng câu hỏi ôn tập - Quản lý dự án",
+  "total_questions": 131,
+  "parts": [
+    {
+      "part": 1,
+      "range": "1-20",
+      "questions": [
+        {"id": 1, "type": "multiple_choice", "question": "Cá nhân nào có vai trò quan trọng nhất đối với một dự án:", "options": {"a": "Giám đốc điều hành công ty", "b": "Khách hàng", "c": "Giám đốc quản lý dự án", "d": "Nhà tài trợ"}, "correct_answer": "c"},
+        {"id": 2, "type": "multiple_choice", "question": "Các giai đoạn nghiên cứu hình thành dự án được thực hiện lần lượt:", "options": {"a": "Nghiên cứu tiền khả thi, nghiên cứu khả thi, nghiên cứu cơ hội đầu tư", "b": "Nghiên cứu cơ hội đầu tư, nghiên cứu tiền khả thi, nghiên cứu khả thi", "c": "Nghiên cứu cơ hội đầu tư, nghiên cứu khả thi, nghiên cứu tiền khả thi", "d": "Nghiên cứu khả thi, nghiên cứu cơ hội đầu tư, nghiên cứu tiền khả thi"}, "correct_answer": "b"},
+        {"id": 3, "type": "true_false", "question": "Mục tiêu đầu tư dự án của tư nhân là tăng giá trị của chủ sở hữu và đem lại nhiều giá trị cho cộng đồng.", "correct_answer": "Sai"},
+        {"id": 4, "type": "true_false", "question": "Sản phẩm của dự án có thể giống hoặc khác các sản phẩm của những dự án trước.", "correct_answer": "Đúng"},
+        {"id": 5, "type": "multiple_choice", "question": "Đối tượng nào sau đây quan tâm nhiều nhất đến hiệu quả kinh tế, xã hội và môi trường của dự án:", "options": {"a": "Chủ dự án", "b": "Ngân hàng", "c": "Cơ quan quản lý ngân sách Nhà nước", "d": "Các cấp chính quyền"}, "correct_answer": "d"},
+        {"id": 6, "type": "true_false", "question": "Dự án có chu kỳ phát triển riêng và thời gian tồn tại hữu hạn.", "correct_answer": "Đúng"},
+        {"id": 7, "type": "true_false", "question": "Dự án chỉ có một khách hàng và chủ đầu tư chính.", "correct_answer": "Sai"},
+        {"id": 8, "type": "true_false", "question": "Phân tích cơ sở pháp lý là một nội dung quan trọng khi phân tích dự án.", "correct_answer": "Đúng"},
+        {"id": 9, "type": "true_false", "question": "Các rủi ro của dự án chỉ xuất hiện trong giai đoạn thực hiện dự án.", "correct_answer": "Sai"},
+        {"id": 10, "type": "multiple_choice", "question": "Nếu nguyên liệu sản xuất của dự án là nguyên liệu ngoại nhập thì địa điểm xây dựng dự án cần:", "options": {"a": "Gần trường học", "b": "Gần khu dân cư", "c": "Gần thị trường tiêu thụ", "d": "Gần sân bay, bến cảng"}, "correct_answer": "d"},
+        {"id": 11, "type": "true_false", "question": "Khi dự tính lãi lỗ cho dự án, có thể so sánh doanh thu và chi phí của dự án ở các thời điểm khác nhau vì chúng không xuất hiện cùng thời điểm.", "correct_answer": "Sai"},
+        {"id": 12, "type": "multiple_choice", "question": "Dự án xây dựng nhà máy sản xuất sản phẩm cần được đặt gần thị trường tiêu thụ khi:", "options": {"a": "Sản phẩm của dự án dễ hư hỏng", "b": "Nguyên liệu sản xuất của nhà máy phải nhập từ nước ngoài", "c": "Dự án cần sử dụng nhiều nguyên, nhiên vật liệu", "d": "Dự án có ít lao động làm việc"}, "correct_answer": "a"},
+        {"id": 13, "type": "true_false", "question": "Mục tiêu quan trọng của các dự án đầu tư của Nhà nước là đạt được lợi nhuận cao.", "correct_answer": "Sai"},
+        {"id": 14, "type": "multiple_choice", "question": "Trình bày sự cần thiết phải đầu tư trong dự án khả thi là phải trình bày:", "options": {"a": "Căn cứ pháp lý khẳng định sự cần thiết phải đầu tư", "b": "Căn cứ pháp lý, thực tiễn và khoa học khẳng định sự cần thiết phải đầu tư", "c": "Căn cứ pháp lý, thực tiễn khẳng định sự cần thiết phải đầu tư", "d": "Căn cứ thực tiễn khẳng định sự cần thiết phải đầu tư"}, "correct_answer": "b"},
+        {"id": 15, "type": "true_false", "question": "Phân tích cơ sở pháp lý là một nội dung quan trọng khi phân tích dự án.", "correct_answer": "Đúng"},
+        {"id": 16, "type": "multiple_choice", "question": "Nghiên cứu cơ hội đầu tư là hình thức:", "options": {"a": "Nghiên cứu chi tiết về công nghệ và kỹ thuật của dự án", "b": "Nghiên cứu sơ bộ các yếu tố cơ bản của dự án như nhu cầu và khả năng tiến hành dự án, phác thảo kết quả có thể đạt được và lý do thực hiện dự án", "c": "Nghiên cứu những điều kiện, những khả năng để chủ đầu tư có thể đưa ra quyết định đầu tư", "d": "Nghiên cứu chi tiết về sản phẩm của dự án đầu tư"}, "correct_answer": "b"},
+        {"id": 17, "type": "multiple_choice", "question": "Dự án tiền khả thi và dự án khả thi đối với những dự án đầu tư có quy mô lớn:", "options": {"a": "Khác nhau về bố cục nhưng giống nhau về độ tin cậy dữ liệu", "b": "Giống nhau về bố cục nhưng khác nhau về độ tin cậy dữ liệu", "c": "Giống nhau về bố cục và độ tin cậy dữ liệu", "d": "Khác nhau về bố cục và độ tin cậy dữ liệu"}, "correct_answer": "b"},
+        {"id": 18, "type": "multiple_choice", "question": "Nghiên cứu, phân tích thị trường trong dự án nhằm xác định:", "options": {"a": "Sản xuất cái gì? Cho ai? Với giá cả nào?", "b": "Sản xuất bằng cách nào", "c": "Địa điểm bố trí dự án", "d": "Dự án mang lại kết quả nào cho chủ đầu tư"}, "correct_answer": "a"},
+        {"id": 19, "type": "true_false", "question": "Nghiên cứu khả thi được thực hiện ngay sau nghiên cứu cơ hội đầu tư.", "correct_answer": "Sai"},
+        {"id": 20, "type": "multiple_choice", "question": "Nghiên cứu tiền khả thi là:", "options": {"a": "Giai đoạn nghiên cứu những khả năng, những điều kiện để người chủ đầu tư có thể xem xét khả năng tiến hành đầu tư", "b": "Là giai đoạn nghiên cứu sơ bộ các yếu tố cơ bản của dự án và là giai đoạn nghiên cứu sơ bộ để lựa chọn khả năng đầu tư chủ yếu từ các cơ hội đầu tư", "c": "Giai đoạn nghiên cứu một cách sơ bộ để lựa chọn các khả năng đầu tư chủ yếu từ các cơ hội đầu tư", "d": "Giai đoạn nghiên cứu các các yếu tố cơ bản của dự án một cách sơ bộ"}, "correct_answer": "b"}
+      ]
+    },
+    {
+      "part": 2,
+      "range": "21-40",
+      "questions": [
+        {"id": 21, "type": "true_false", "question": "Chủ đầu tư có năng lực chuyên môn, kinh nghiệm và am hiểu về dự án thì nên áp dụng mô hình chủ nhiệm điều hành dự án.", "correct_answer": "Sai"},
+        {"id": 22, "type": "true_false", "question": "Một trở ngại trong mô hình xây dựng đội ngũ theo mô hình quản lý dạng ma trận là các nhóm thường quá lớn nên khó quản lý.", "correct_answer": "Sai"},
+        {"id": 23, "type": "true_false", "question": "Nhược điểm của hình thức tổ chức dự án dạng chức năng là nhân viên khó phát triển kỹ năng quản lý.", "correct_answer": "Đúng"},
+        {"id": 24, "type": "true_false", "question": "Trong mô hình chủ đầu tư trực tiếp quản lý dự án, mọi quyết định của tổ cố vấn phải thông qua chủ đầu tư.", "correct_answer": "Đúng"},
+        {"id": 25, "type": "true_false", "question": "Trong mô hình chìa khóa trao tay, tổng thầu được phép thuê thêm thầu phụ để thực hiện dự án.", "correct_answer": "Đúng"},
+        {"id": 26, "type": "true_false", "question": "Phân loại quản lý dự án theo đối tượng quản lý không bao gồm quản lý rủi ro của dự án.", "correct_answer": "Sai"},
+        {"id": 27, "type": "true_false", "question": "Quản lý quá trình lập, thực hiện, giám sát dự án thuộc nội dung quản lý vĩ mô của dự án.", "correct_answer": "Đúng"},
+        {"id": 28, "type": "true_false", "question": "Ưu điểm của quản lý dự án tốt là đạt được chi phí thực hiện dự án thấp hơn so với kế hoạch chi phí đề ra.", "correct_answer": "Sai"},
+        {"id": 29, "type": "true_false", "question": "Mô hình chuyên trách quản lý dự án có thể dẫn đến tình trạng lãng phí nguồn nhân lực.", "correct_answer": "Đúng"},
+        {"id": 30, "type": "true_false", "question": "Quản lý thông tin là một trong các yếu tố thuộc đối tượng quản lý của dự án.", "correct_answer": "Đúng"},
+        {"id": 31, "type": "multiple_choice", "question": "Nhược điểm lớn nhất của mô hình quản lý dự án dạng ma trận:", "options": {"a": "Xuất hiện các ý muốn kéo dài dự án", "b": "Do phải san sẻ nguồn lực giữa các dự án khác nhau nên không cân đối được nguồn lực", "c": "Tranh chấp quyền lợi giữa nhà quản trị dự án và nhà quản trị chức năng", "d": "Không ưu tiên cho kết quả cuối cùng của dự án"}, "correct_answer": "c"},
+        {"id": 32, "type": "multiple_choice", "question": "Mô hình cho phép tổ chức đấu thầu, lựa chọn tổng thầu để thực hiện toàn bộ dự án là đặc điểm của:", "options": {"a": "Mô hình quản lý dự án dạng ma trận", "b": "Mô hình chủ đầu tư trực tiếp quản lý dự án", "c": "Mô hình chìa khóa trao tay", "d": "Mô hình chuyên trách quản lý dự án"}, "correct_answer": "c"},
+        {"id": 33, "type": "multiple_choice", "question": "Việc lập ra báo cáo và ra quyết định trong cơ cấu tổ chức mô hình quản lý dự án chức năng thường:", "options": {"a": "Được thực hiện thông qua phòng ban các cấp", "b": "Tương tự như cơ cấu tổ chức dự án dạng ma trận", "c": "Chỉ được thực hiện tại văn phòng dự án", "d": "Từ nhà quản trị truyền thông đến các phòng ban"}, "correct_answer": "a"},
+        {"id": 34, "type": "multiple_choice", "question": "Khi chủ đầu tư có năng lực, chuyên môn phù hợp với kỹ thuật được sử dụng trong dự án thì nên áp dụng mô hình quản lý dự án dạng:", "options": {"a": "Chủ đầu tư trực tiếp quản lý dự án", "b": "Ma trận", "c": "Chức năng", "d": "Chìa khóa trao tay"}, "correct_answer": "a"},
+        {"id": 35, "type": "multiple_choice", "question": "Các thành viên của dự án tách rời khỏi phòng chức năng chuyên môn để thực hiện các nhiệm vụ của dự án là dạng mô hình quản lý dự án:", "options": {"a": "Chủ nhiệm điều hành dự án", "b": "Chức năng", "c": "Chìa khóa trao tay", "d": "Chuyên trách quản lý dự án"}, "correct_answer": "d"},
+        {"id": 36, "type": "multiple_choice", "question": "…………. là việc áp dụng kiến thức, kỹ năng, công cụ và kỹ thuật vào các hoạt động của dự án để đáp ứng các yêu cầu đề ra:", "options": {"a": "Quản lý chất lượng", "b": "Quản lý chương trình", "c": "Quản trị mục tiêu", "d": "Quản lý dự án"}, "correct_answer": "d"},
+        {"id": 37, "type": "multiple_choice", "question": "Mục tiêu của quản lý chất lượng dự án là:", "options": {"a": "Sản xuất ra các sản phẩm có chất lượng cao nhất", "b": "Đảm bảo dự án thỏa mãn được các yêu cầu đề ra", "c": "Đảm bảo các tiêu chuẩn chất lượng chính được đáp ứng", "d": "Sản xuất ra các sản phẩm có chất lượng phù hợp với tất cả các khách hàng"}, "correct_answer": "b"},
+        {"id": 38, "type": "multiple_choice", "question": "………………. là một nỗ lực tạm thời được tiến hành nhằm tạo một sản phẩm hoặc dịch vụ duy nhất:", "options": {"a": "Nhiệm vụ", "b": "Chương trình", "c": "Quản lý dự án", "d": "Dự án"}, "correct_answer": "d"},
+        {"id": 39, "type": "multiple_choice", "question": "Nội dung nào sau đây không thuộc phạm vi của quản lý chất lượng dự án:", "options": {"a": "Xác định các tiêu chuẩn về chất lượng của sản phẩm", "b": "Đảm bảo về chất lượng của sản phẩm được sản xuất", "c": "Quản lý quá trình thay đổi chất lượng sản phẩm", "d": "Xác định cách thức tổ chức các giai đoạn của dự án"}, "correct_answer": "d"},
+        {"id": 40, "type": "multiple_choice", "question": "Hoạt động đầu tiên cần thực hiện trong quản lý thời gian dự án là:", "options": {"a": "Ước lượng thời gian thực hiện cho mỗi công việc", "b": "Xác định các mốc thời gian quan trọng", "c": "Sắp xếp thứ tự các công việc cần thực hiện", "d": "Xác định các công việc cần thực hiện"}, "correct_answer": "d"}
+      ]
+    },
+    {
+      "part": 3,
+      "range": "41-60",
+      "questions": [
+        {"id": 41, "type": "true_false", "question": "Việc lập kế hoạch sẽ luôn đem lại những hiệu quả tốt cho dự án.", "correct_answer": "Sai"},
+        {"id": 42, "type": "true_false", "question": "Kế hoạch dự án được lập càng sớm sẽ càng tốt.", "correct_answer": "Sai"},
+        {"id": 43, "type": "true_false", "question": "Khi lập kế hoạch cho dự án không cần dự kiến nguồn lực về con người.", "correct_answer": "Sai"},
+        {"id": 44, "type": "true_false", "question": "Khi lập kế hoạch cho dự án cần xác định mục tiêu của dự án đầu tiên.", "correct_answer": "Đúng"},
+        {"id": 45, "type": "true_false", "question": "Kế hoạch dự án là cơ sở cho việc giám sát và đánh giá quá trình thực hiện dự án.", "correct_answer": "Đúng"},
+        {"id": 46, "type": "true_false", "question": "Kế hoạch dự án là cơ sở cho việc giám sát và đánh giá quá trình thực hiện dự án. (câu lặp lại)", "correct_answer": "Đúng"},
+        {"id": 47, "type": "true_false", "question": "Mục tiêu là yếu tố nền tảng cho việc lập kế hoạch của dự án.", "correct_answer": "Đúng"},
+        {"id": 48, "type": "true_false", "question": "Với các dự án có quy mô nhỏ thì không cần lập kế hoạch.", "correct_answer": "Sai"},
+        {"id": 49, "type": "true_false", "question": "Một kế hoạch yếu kém sẽ dẫn đến nguy cơ khó khăn trong việc triển khai thực hiện.", "correct_answer": "Đúng"},
+        {"id": 50, "type": "true_false", "question": "Kế hoạch dự án tốt là cơ sở giúp nhà quản lý giảm thiểu rủi ro, tránh lãng phí nguồn lực trong quá trình thực hiện.", "correct_answer": "Đúng"},
+        {"id": 51, "type": "multiple_choice", "question": "Kế hoạch là:", "options": {"a": "Một hệ thống văn bản thể hiện các nhiệm vụ sẽ thực hiện trong kỳ kế hoạch", "b": "Một hệ thống văn bản thể hiện các mục tiêu, sản phẩm của dự án", "c": "Một hệ thống các văn bản thể hiện phương án sử dụng các nguồn lực để đạt được các mục tiêu của dự án", "d": "Một hệ thống văn bản thể hiện mục tiêu, sản phẩm của dự án, các nhiệm vụ cần thực hiện, phương án sử dụng các nguồn lực để đạt được các mục tiêu của dự án"}, "correct_answer": "d"},
+        {"id": 52, "type": "multiple_choice", "question": "Quy trình lập kế hoạch dự án được tiến hành trong:", "options": {"a": "5 bước", "b": "4 bước", "c": "6 bước", "d": "3 bước"}, "correct_answer": "b"},
+        {"id": 53, "type": "multiple_choice", "question": "Thời điểm lập kế hoạch dự án cho năm thứ hai:", "options": {"a": "Lập càng sớm càng tốt", "b": "Cùng với thời điểm lập kế hoạch dự án năm thứ nhất", "c": "Cùng với thời điểm bắt đầu thực hiện dự án", "d": "Cùng với thời điểm lập kế hoạch dự án năm thứ nhất"}, "correct_answer": "a"},
+        {"id": 54, "type": "multiple_choice", "question": "Nội dung nào không được thể hiện trong kế hoạch dự án:", "options": {"a": "Những khó khăn tiềm tàng", "b": "Thời gian và tiến độ thực hiện dự án", "c": "Mục tiêu của dự án", "d": "Các giai đoạn hình thành dự án"}, "correct_answer": "d"},
+        {"id": 55, "type": "multiple_choice", "question": "Nội dung của bước thứ 3 trong lập kế hoạch dự án là:", "options": {"a": "Lập lịch trình thực hiện dự án", "b": "Phát triển kế hoạch", "c": "Xác định mục tiêu", "d": "Xây dựng sơ đồ kế hoạch dự án"}, "correct_answer": "a"},
+        {"id": 56, "type": "multiple_choice", "question": "Lập kế hoạch dự án là:", "options": {"a": "Trình bày các công việc cần thực hiện của dự án", "b": "Tất cả các đáp án trên", "c": "Bản mô tả quá trình thực hiện dự án", "d": "Đề ra mục tiêu và các phương án thực hiện dự án"}, "correct_answer": "d"},
+        {"id": 57, "type": "multiple_choice", "question": "Phát biểu nào sau đây là đúng nhất:", "options": {"a": "Các dự báo là cơ sở không quan trọng cho việc lập kế hoạch dự án", "b": "Trong nhiều trường hợp, việc lập kế hoạch dự án chỉ là hình thức", "c": "Để lập kế hoạch dự án tốt, trước tiên cần xác định rõ mục tiêu của dự án", "d": "Kế hoạch của dự án luôn khác xa với thực tế và khó thực hiện"}, "correct_answer": "c"},
+        {"id": 58, "type": "multiple_choice", "question": "Phát biểu nào sau đây không phải là lý do lập kế hoạch dự án:", "options": {"a": "Là cơ sở để thu hồi vốn nhanh nhất đối với các dự án đầu tư của Nhà nước", "b": "Là cơ sở để điều phối nguồn lực, tiến độ của dự án", "c": "Là căn cứ để dự toán ngân sách cho dự án", "d": "Là cơ sở để tuyển dụng, bố trí nhân sự"}, "correct_answer": "a"},
+        {"id": 59, "type": "multiple_choice", "question": "Người đọc quan tâm đến nội dung nào đầu tiên khi đọc bản kế hoạch của dự án:", "options": {"a": "Kế hoạch của dự án được xây dựng trong thời gian ngắn hay dài", "b": "Tóm tắt kế hoạch dự án", "c": "Kế hoạch dự án phản ánh văn hóa doanh nghiệp như thế nào", "d": "Kế hoạch dự án có gắn liền với mục tiêu, chiến lược của doanh nghiệp hay không"}, "correct_answer": "b"},
+        {"id": 60, "type": "multiple_choice", "question": "Chủ thể chịu trách nhiệm quản lý, chỉ đạo việc lên kế hoạch cho dự án là:", "options": {"a": "Thành viên dự án", "b": "Nhà tài trợ/Chủ đầu tư", "c": "Giám đốc dự án", "d": "Giám đốc chức năng"}, "correct_answer": "c"}
+      ]
+    },
+    {
+      "part": 4,
+      "range": "61-78",
+      "questions": [
+        {"id": 61, "type": "true_false", "question": "Theo phương pháp xác định, thời gian thực hiện các công việc của dự án được tính bằng thời gian bình quân để thực hiện các công việc tương tự.", "correct_answer": "Đúng"},
+        {"id": 62, "type": "true_false", "question": "Phương pháp xác định và phương pháp ngẫu nhiên trong dự tính thời gian thực hiện công việc của dự án giống nhau vì đều sử dụng phương pháp bình quân toán học để tính.", "correct_answer": "Sai"},
+        {"id": 63, "type": "true_false", "question": "Phương sai của đường găng là tổng phương sai của các công việc trên đường găng đó.", "correct_answer": "Đúng"},
+        {"id": 64, "type": "true_false", "question": "Độ lệch chuẩn của đường găng là tổng độ lệch chuẩn của các công việc trên đường găng đó.", "correct_answer": "Sai"},
+        {"id": 65, "type": "true_false", "question": "Công việc A có thời gian bi quan là 8 ngày, thời gian lạc quan là 4 ngày, thời gian thường gặp là 6 ngày. Vậy, theo phương pháp ngẫu nhiên, thời gian thực hiện của công việc A là 6 ngày.", "correct_answer": "Đúng"},
+        {"id": 66, "type": "true_false", "question": "Một dự án có các công việc cần tập trung chỉ đạo là A (thời gian thực hiện là 4 ngày), B (thời gian thực hiện là 7 ngày), C (thời gian thực hiện là 4 ngày) và D (thời gian thực hiện là 3 ngày). Vậy, thời gian thực hiện của dự án là 18 ngày.", "correct_answer": "Đúng"},
+        {"id": 67, "type": "true_false", "question": "Thông qua sơ đồ PERT, nhà quản lý dự án có thể nhìn thấy một cách trực quan thời gian hoàn thành dự án.", "correct_answer": "Đúng"},
+        {"id": 68, "type": "true_false", "question": "Theo phương pháp ngẫu nhiên, thời gian thực hiện công việc được xác định bằng thời gian bình quân để thực hiện các công việc tương tự ở các dự án trước đó.", "correct_answer": "Sai"},
+        {"id": 69, "type": "true_false", "question": "Độ lệch chuẩn của đường găng được xác định bằng căn bậc hai của phương sai đường găng.", "correct_answer": "Đúng"},
+        {"id": 70, "type": "true_false", "question": "Kỹ thuật PERT và CPM cơ bản giống nhau, chỉ khác nhau về phương pháp vẽ sơ đồ mạng.", "correct_answer": "Sai"},
+        {"id": 71, "type": "multiple_choice", "question": "Công việc A có thời gian bi quan là 15 ngày, thời gian lạc quan là 9 ngày, thời gian thường gặp là 12 ngày. Vậy, theo phương pháp ngẫu nhiên, thời gian thực hiện của công việc A là:", "options": {"a": "12 ngày", "b": "10 ngày", "c": "11 ngày", "d": "Không phương án nào đúng"}, "correct_answer": "a"},
+        {"id": 72, "type": "multiple_choice", "question": "Công việc B có thời gian bi quan là 20 ngày, thời gian lạc quan là 15 ngày, vậy độ lệch chuẩn về thời gian của công việc này là:", "options": {"a": "0,91", "b": "Không phương án nào đúng", "c": "8,3", "d": "0,83"}, "correct_answer": "d"},
+        {"id": 73, "type": "multiple_choice", "question": "Công việc X có thời gian bi quan là 18 ngày, thời gian lạc quan là 11 ngày, vậy độ lệch chuẩn về thời gian của công việc này là:", "options": {"a": "Không phương án nào đúng", "b": "0,91", "c": "0,82", "d": "1,167"}, "correct_answer": "d"},
+        {"id": 74, "type": "multiple_choice", "question": "Công việc X có thời gian bi quan là 12 ngày, thời gian lạc quan là 9 ngày, thời gian thường gặp là 9 ngày. Vậy, theo phương pháp ngẫu nhiên, thời gian thực hiện của công việc X là:", "options": {"a": "10 ngày", "b": "Không phương án nào đúng", "c": "8 ngày", "d": "9,5 ngày"}, "correct_answer": "d"},
+        {"id": 75, "type": "multiple_choice", "question": "Công thức Te=(a+4m+b)/6 dùng để xác định:", "options": {"a": "Thời gian lạc quan của công việc i", "b": "Thời gian thực hiện dự tính của công việc i", "c": "Thời gian thường gặp của công việc i", "d": "Thời gian bi quan của công việc i"}, "correct_answer": "b"},
+        {"id": 76, "type": "multiple_choice", "question": "Một tiến trình của dự án có 3 công việc là A, B, C trong đó A và B là công việc thực còn C là công việc ảo. Biết rằng phương sai của công việc A là 1,25 còn của công việc B là 1,35. Vậy phương sai của cả tiến trình là:", "options": {"a": "2,6", "b": "1,25", "c": "Chưa xác định được do chưa biết phương sai của công việc C", "d": "1,35"}, "correct_answer": "c"},
+        {"id": 77, "type": "multiple_choice", "question": "Tìm câu sai trong các câu sau:", "options": {"a": "Phương sai của đường găng cũng chính là phương sai của dự án", "b": "Trong sơ đồ PERT, có thể có nhiều đường găng", "c": "Độ lệch chuẩn của một đường bằng độ lệch chuẩn của các công việc trên đường đó cộng lại", "d": "Phương sai của một đường bằng phương sai của các công việc trên đường đó cộng lại"}, "correct_answer": "c"},
+        {"id": 78, "type": "multiple_choice", "question": "Đường găng của một dự án chỉ có 2 công việc là X và Y. Phương sai của công việc X và Y lần lượt là 1,8 và 1,2. Vậy độ lệch chuẩn về thời gian của đường găng là:", "options": {"a": "3,00", "b": "Không phương án nào đúng", "c": "1,73", "d": "2,44"}, "correct_answer": "c"}
+      ]
+    },
+    {
+      "part": 5,
+      "range": "79-91",
+      "questions": [
+        {"id": 79, "type": "true_false", "question": "Nguồn lực thực hiện dự án là không hạn chế.", "correct_answer": "Sai"},
+        {"id": 80, "type": "true_false", "question": "Biểu đồ phụ tải nguồn lực phản ánh số lượng từng loại nguồn lực cần thiết theo kế hoạch tiến độ trong một thời kỳ nhất định cho từng công việc hoặc toàn bộ dự án.", "correct_answer": "Đúng"},
+        {"id": 81, "type": "true_false", "question": "Biểu đồ phụ tải nguồn lực trình bày bằng hình ảnh nhu cầu cao thấp khác nhau về một loại nguồn lực nào đó trong từng thời đoạn.", "correct_answer": "Đúng"},
+        {"id": 82, "type": "true_false", "question": "Trình tự vẽ biểu đồ phụ tải nguồn lực là vẽ sơ đồ PERT điều chỉnh, xây dựng sơ đồ PERT và vẽ biểu đồ phụ tải nguồn lực.", "correct_answer": "Sai"},
+        {"id": 83, "type": "true_false", "question": "Phân phối nguồn lực một cách hợp lý nhằm đảm bảo sự phù hợp giữa giới hạn các nguồn lực, các ràng buộc về kỹ thuật để dự án đạt mục tiêu duy nhất là hoàn thành đúng tiến độ thời gian thực hiện.", "correct_answer": "Sai"},
+        {"id": 84, "type": "true_false", "question": "Trên biểu đồ phụ tải nguồn lực, trục tung thể hiện đơn vị lao động.", "correct_answer": "Đúng"},
+        {"id": 85, "type": "true_false", "question": "Biểu đồ phụ tải nguồn lực và biểu đồ PERT điều chỉnh giống nhau ở đơn vị trên trục tung.", "correct_answer": "Sai"},
+        {"id": 86, "type": "true_false", "question": "Nhìn vào biểu đồ phụ tải nguồn lực, nhà quản lý dự án biết được số lao động cần huy động theo tiến độ thực hiện dự án.", "correct_answer": "Đúng"},
+        {"id": 87, "type": "true_false", "question": "Biểu đồ phụ tải nguồn lực và biểu đồ PERT điều chỉnh giống nhau ở đơn vị trên trục hoành.", "correct_answer": "Đúng"},
+        {"id": 88, "type": "true_false", "question": "Khi vẽ biểu đồ phụ tải nguồn lực, bắt buộc phải vẽ biểu đồ PERT điều chỉnh.", "correct_answer": "Đúng"},
+        {"id": 89, "type": "multiple_choice", "question": "Biểu đồ phụ tải nguồn lực có tác dụng sau, ngoại trừ:", "options": {"a": "Là cơ sở để lập kế hoạch sản xuất, cung ứng nguyên vật liệu, máy móc thiết bị … cho dự án", "b": "Là cơ sở để các nhà quản lý dự án tính toán và quản lý chất lượng dự án", "c": "Là cơ sở để các nhà quản lý dự án điều phối, bố trí nguồn lực khan hiếm theo yêu cầu tiến độ dự án", "d": "Trình bày bằng hình ảnh có nhu cầu cao, thấp khác nhau về một loại nguồn lực nào đó trong từng giai đoạn"}, "correct_answer": "b"},
+        {"id": 90, "type": "multiple_choice", "question": "Chọn câu ĐÚNG trong các phát biểu sau:", "options": {"a": "Trên biểu đồ phụ tải nguồn lực, lao động được thể hiện trên trục hoành của biểu đồ", "b": "Trên biểu đồ phụ tải nguồn lực, thời gian được thể hiện trên trục hoành hoặc trục tung của biểu đồ", "c": "Trên biểu đồ phụ tải nguồn lực, thời gian được thể hiện trên trục tung của biểu đồ", "d": "Trên biểu đồ phụ tải nguồn lực, lao động được thể hiện trên trục tung của biểu đồ"}, "correct_answer": "d"},
+        {"id": 91, "type": "multiple_choice", "question": "Chọn câu SAI trong các phát biểu sau:", "options": {"a": "Điều chỉnh đều nguồn lực là phương pháp giúp tối đa hóa mức khác biệt về cầu nguồn lực giữa các thời kỳ", "b": "Điều chỉnh đều nguồn lực giúp các nhà quản lý dự án chủ động đặt mua nguyên vật liệu vào các thời điểm cố định, định kỳ", "c": "Điều chỉnh đều nguồn lực là phương pháp giúp tối thiểu hóa mức khác biệt về cầu nguồn lực giữa các thời kỳ", "d": "Sau khi điều chỉnh đều nguồn lực, nhu cầu nguồn lực sẽ ổn định giúp dự án giảm thiểu mức dự trữ hàng hóa liên quan và chi phí nhân công"}, "correct_answer": "a"}
+      ]
+    },
+    {
+      "part": 6,
+      "range": "92-111",
+      "questions": [
+        {"id": 92, "type": "true_false", "question": "Ngân sách dự án chỉ trình bày kế hoạch chi của một hoặc nhiều dự án.", "correct_answer": "Sai"},
+        {"id": 93, "type": "true_false", "question": "Dự toán ngân sách dự án dựa vào phạm vi và tiêu chuẩn trong quá khứ và hiện hành của dự án đã được duyệt.", "correct_answer": "Đúng"},
+        {"id": 94, "type": "true_false", "question": "Quản lý chi phí dự án bao gồm các bước: Lập kế hoạch, tổ chức, lãnh đạo và kiểm soát chi phí.", "correct_answer": "Sai"},
+        {"id": 95, "type": "true_false", "question": "Lập kế hoạch ngân sách dự án là một trong những quá trình của hoạt động quản lý chi phí dự án.", "correct_answer": "Đúng"},
+        {"id": 96, "type": "true_false", "question": "Đường chi phí cơ sở là một căn cứ quan trọng để kiểm soát chi phí dự án.", "correct_answer": "Đúng"},
+        {"id": 97, "type": "true_false", "question": "Dự toán ngân sách và kế hoạch dự tính thời gian thực hiện của dự án không có mối quan hệ với nhau.", "correct_answer": "Sai"},
+        {"id": 98, "type": "true_false", "question": "Ưu điểm của phương pháp dự toán ngân sách từ cao xuống thấp là thúc đẩy sự phối hợp nhịp nhàng giữa các nhà quản lý dự án cấp thấp với các nhà quản lý cấp chức năng.", "correct_answer": "Sai"},
+        {"id": 99, "type": "true_false", "question": "Phương pháp dự toán ngân sách từ thấp lên cao là phương pháp hiệu quả nhất.", "correct_answer": "Sai"},
+        {"id": 100, "type": "true_false", "question": "Dự toán ngân sách cho dự án đơn giản hơn việc dự toán ngân sách cho các công việc thực hiện thường xuyên của tổ chức.", "correct_answer": "Sai"},
+        {"id": 101, "type": "true_false", "question": "Ngân sách chỉ được dự tính, dựa trên một loạt các giả thuyết và dữ liệu thu thập được là một trong những đặc điểm của dự toán ngân sách.", "correct_answer": "Đúng"},
+        {"id": 102, "type": "multiple_choice", "question": "Phương pháp dự toán ngân sách từ cao xuống thấp có đặc điểm là:", "options": {"a": "Tất cả các phương án trên", "b": "Nhà QL cấp thấp nhất lập ngân sách trung và ngắn hạn cho bộ phận chức năng phụ trách", "c": "Nhà quản lý cấp cao lập ngân sách hoạt động cho từng công việc cụ thể", "d": "Nhà quản lý cấp cao chuẩn bị ngân sách dài hạn dựa trên mục tiêu của tổ chức"}, "correct_answer": "d"},
+        {"id": 103, "type": "multiple_choice", "question": "Phương pháp dự toán ngân sách không bao gồm phương pháp nào dưới đây:", "options": {"a": "Dự toán ngân sách từ thấp lên cao", "b": "Dự toán ngân sách từ cao xuống thấp", "c": "Dự toán ngân sách áp dụng phương pháp kết hợp", "d": "Dự toán ngân sách ngang bằng"}, "correct_answer": "d"},
+        {"id": 104, "type": "multiple_choice", "question": "Qui trình quản lý chi phí dự án không bao gồm:", "options": {"a": "Lập kế hoạch ngân sách dự án", "b": "Kiểm soát chi phí", "c": "Điều phối nguồn lực", "d": "Ước tính chi phí"}, "correct_answer": "c"},
+        {"id": 105, "type": "multiple_choice", "question": "Nhược điểm của phương pháp dự toán kết hợp là:", "options": {"a": "Quá trình lập dự toán kéo dài và tốn nhiều thời gian", "b": "Dự toán ngân sách cấp thấp chỉ bó hẹp trong phạm vi chi phí kế hoạch của cấp trên", "c": "Các nhà quản lý cấp cao khó kiểm soát được quá trình lập ngân sách của cấp dưới", "d": "Đòi hỏi phải có sự kết hợp của các loại ngân sách để đạt được KH ngân sách dài hạn"}, "correct_answer": "a"},
+        {"id": 106, "type": "multiple_choice", "question": "Theo phương pháp lập ngân sách từ dưới lên, xây dựng khung ngân sách là công việc của cấp nào đảm nhiệm:", "options": {"a": "Các nhà quản lý cấp chức năng", "b": "Các nhà quản lý cấp cao", "c": "Các nhà quản lý dự án", "d": "Tất cả các cấp"}, "correct_answer": "b"},
+        {"id": 107, "type": "multiple_choice", "question": "Chi phí trực tiếp các công việc trong dự án không bao gồm:", "options": {"a": "Chi phí tiền lương trả cho người trực tiếp thực hiện các công việc của dự án", "b": "Chi phí nguyên vật liệu sử dụng để quét dọn, lau chùi các thiết bị", "c": "Chi phí quản lý liên quan đến chi phí hoạt động của văn phòng dự án", "d": "Chi phí thiết bị, công cụ sản xuất được sử dụng để thực hiện từng công việc dự án"}, "correct_answer": "c"},
+        {"id": 108, "type": "multiple_choice", "question": "Theo phương pháp lập ngân sách từ dưới lên, lập ngân sách trung và ngắn hạn cho bộ phận chức năng phụ trách là nhiệm vụ của:", "options": {"a": "Các nhà quản lý cấp cao", "b": "Các nhà quản lý dự án", "c": "Các nhà quản lý cấp chức năng", "d": "Tất cả các cấp"}, "correct_answer": "c"},
+        {"id": 109, "type": "multiple_choice", "question": "Dự toán chi phí được thực hiện khi hoàn thành công việc nào dưới đây:", "options": {"a": "Tất cả các đáp án trên", "b": "Xác định các thiết bị sử dụng trong dự án", "c": "Thiết kế dự án, xác định rõ phạm vi công việc", "d": "Xây dựng chi phí tiền công, nhiên liệu tiêu hao"}, "correct_answer": "a"},
+        {"id": 110, "type": "multiple_choice", "question": "Đặc điểm của dự toán ngân sách không bao gồm đặc điểm:", "options": {"a": "Chỉ được dự tính, dựa trên một loạt các giả thuyết và dữ liệu thu thập được", "b": "Ngân sách sẽ thay đổi khi khối lượng các công việc trong dự án thay đổi", "c": "Phức tạp hơn việc dự toán ngân sách cho các công việc thực hiện thường xuyên", "d": "Ngân sách không có tính linh hoạt, không thể điều chỉnh được"}, "correct_answer": "d"},
+        {"id": 111, "type": "multiple_choice", "question": "Quy trình quản lý chi phí dự án sẽ thực hiện theo các bước:", "options": {"a": "Ước tính chi phí, lập kế hoạch ngân sách dự án, kiểm soát chi phí", "b": "Tất cả các đáp án trên đều sai", "c": "Kiểm soát chi phí, lập kế hoạch ngân sách dự án, ước tính chi phí", "d": "Lập kế hoạch ngân sách dự án, ước tính chi phí, kiểm soát chi phí"}, "correct_answer": "d"}
+      ]
+    },
+    {
+      "part": 7,
+      "range": "112-131",
+      "questions": [
+        {"id": 112, "type": "true_false", "question": "Quy trình quản lý chất lượng dự án được thực hiện theo trình tự: Lập kế hoạch chất lượng, đảm bảo chất lượng và kiểm soát chất lượng.", "correct_answer": "Đúng"},
+        {"id": 113, "type": "true_false", "question": "Xây dựng chương trình, chính sách và kế hoạch chất lượng là một trong những nội dung của công tác lập kế hoạch chất lượng dự án.", "correct_answer": "Đúng"},
+        {"id": 114, "type": "true_false", "question": "Hoạt động kiểm soát chất lượng được thực hiện trong suốt quá trình thực hiện dự án.", "correct_answer": "Đúng"},
+        {"id": 115, "type": "true_false", "question": "Các chi phí trong nhóm tổn thất nội bộ phát sinh trước, trong và sau quá trình sản xuất sản phẩm dịch vụ rời khỏi tầm kiểm soát của doanh nghiệp.", "correct_answer": "Sai"},
+        {"id": 116, "type": "true_false", "question": "Chi phí ngăn ngừa phát sinh trong suốt quá trình thực hiện dự án.", "correct_answer": "Đúng"},
+        {"id": 117, "type": "true_false", "question": "Nếu sản phẩm tốt, chi phí tổn thất nội bộ và chi phí bên ngoài thường rất lớn.", "correct_answer": "Sai"},
+        {"id": 118, "type": "true_false", "question": "Lưu đồ quá trình cho phép nhận biết công việc hay hoạt động nào không cần thiết để có thể loại bỏ.", "correct_answer": "Đúng"},
+        {"id": 119, "type": "true_false", "question": "Trong biểu đồ Pareto, trục ngang trình bày tỷ lệ phần trăm của nguyên nhân kém chất lượng, trục dọc phản ánh nguyên nhân gây ra kém chất lượng.", "correct_answer": "Sai"},
+        {"id": 120, "type": "true_false", "question": "Trong biểu đồ kiểm soát thực hiện, bắt buộc phải có đường giới hạn trên và giới hạn dưới.", "correct_answer": "Đúng"},
+        {"id": 121, "type": "true_false", "question": "Biểu đồ hình xương cá là loại biểu đồ chỉ ra các nguyên nhân ảnh hưởng đến chất lượng sản phẩm.", "correct_answer": "Đúng"},
+        {"id": 122, "type": "multiple_choice", "question": "Vai trò của quản lý chất lượng dự án không bao gồm:", "options": {"a": "Đạt được những mục tiêu của quản lý dự án", "b": "Đáp ứng những yêu cầu của chủ đầu tư", "c": "Triệt tiêu những tác động tiêu cực từ môi trường quản trị", "d": "Nâng cao chất lượng sản xuất"}, "correct_answer": "c"},
+        {"id": 123, "type": "multiple_choice", "question": "Công cụ quản lý chất lượng dự án không bao gồm:", "options": {"a": "Lưu đồ quá trình", "b": "Biểu đồ Pareto", "c": "Biểu đồ hình xương cá", "d": "Biểu đồ Gantt"}, "correct_answer": "d"},
+        {"id": 124, "type": "multiple_choice", "question": "Đặc điểm của công tác quản lý chất lượng dự án không bao gồm:", "options": {"a": "Là trách nhiệm chung của tất cả các thành viên, mọi cấp trong đơn vị", "b": "Được thực hiện dưới sự giám sát qua lại giữa nhà quản trị cấp cao và người thừa hành", "c": "Được thực hiện thông qua một hệ thống các chỉ tiêu đánh giá, tiêu chuẩn định mức", "d": "Được thực hiện trong suốt chu kỳ dự án"}, "correct_answer": "b"},
+        {"id": 125, "type": "multiple_choice", "question": "Công cụ lưu đồ quá trình được xây dựng thông qua các nguyên tắc:", "options": {"a": "Huy động mọi thành viên có liên quan vào việc thiết lập lưu đồ", "b": "Mọi dữ liệu thông tin hiện có phải thông báo cho mọi người", "c": "Phải bố trí đủ thời gian để xây dựng lưu đồ", "d": "Tất cả các phương án trên"}, "correct_answer": "d"},
+        {"id": 126, "type": "multiple_choice", "question": "Cấu trúc của biểu đồ Pareto là:", "options": {"a": "Trục dọc và trục ngang đều phản ánh nguyên nhân kém chất lượng", "b": "Trục dọc phản ánh nguyên nhân, trục ngang phản ánh tỷ lệ phần trăm nguyên nhân kém chất lượng", "c": "Trục ngang biểu đồ phản ánh nguyên nhân, trục dọc trình bày tỷ lệ phần trăm của nguyên nhân kém chất lượng", "d": "Tất cả các phương án trên đều sai"}, "correct_answer": "c"},
+        {"id": 127, "type": "multiple_choice", "question": "Công cụ nào sau đây là một trong những công cụ để quản lý chất lượng dự án:", "options": {"a": "Báo cáo tài chính", "b": "Lưu đồ quá trình", "c": "Biểu đồ Gantt", "d": "Biểu đồ thông tin"}, "correct_answer": "b"},
+        {"id": 128, "type": "multiple_choice", "question": "Nội dung quản lý chất lượng dự án bao gồm:", "options": {"a": "Bảo đảm chất lượng dự án", "b": "Lập kế hoạch chất lượng dự án", "c": "Tất cả các phương án trên", "d": "Kiểm soát chất lượng dự án"}, "correct_answer": "c"},
+        {"id": 129, "type": "multiple_choice", "question": "Biểu đồ nào dưới đây liệt kê những nguyên nhân ảnh hưởng đến chất lượng, xác định những nguyên nhân nào cần xử lý trước:", "options": {"a": "Lưu đồ quá trình", "b": "Biểu đồ hình xương cá", "c": "Biểu đồ Pareto", "d": "Biểu đồ kiểm soát thực hiện"}, "correct_answer": "c"},
+        {"id": 130, "type": "multiple_choice", "question": "Chi phí quản lý chất lượng dự án bao gồm:", "options": {"a": "Chi phí tổn thất bên ngoài", "b": "Chi phí ngăn ngừa", "c": "Tất cả các phương án trên", "d": "Chi phí thẩm định, đánh giá"}, "correct_answer": "c"},
+        {"id": 131, "type": "multiple_choice", "question": "Nội dung lập kế hoạch chất lượng dự án không bao gồm:", "options": {"a": "Tất cả các đáp án trên", "b": "Kiểm soát chi phí, lập kế hoạch ngân sách dự án, ước tính chi phí", "c": "Xác định những yêu cầu chất lượng phải đạt tới trong từng thời kỳ", "d": "Phân tích tác động của các nhân tố ảnh hưởng đến chất lượng dự án"}, "correct_answer": "b"}
+      ]
+    }
+  ]
+}
+;
+const st={part:0,q:0,ord:[],done:[],ans:[],show:false};
+function init(){DATA.parts.forEach((p,i)=>{st.ord.push(p.questions.map((_,x)=>x));st.done.push(false);st.ans.push(p.questions.map(()=>({a:false,ok:false,ch:null})));});buildDots();buildList();go(0);}
+function buildDots(){const c=document.getElementById('dots');c.innerHTML='';DATA.parts.forEach((_,i)=>{const d=document.createElement('div');d.className='dot';d.id='d'+i;c.appendChild(d);});}
+function updDots(){const n=st.done.filter(Boolean).length;document.getElementById('otxt').textContent=n+'/7 ph\u1ea7n';DATA.parts.forEach((_,i)=>{const d=document.getElementById('d'+i);d.className='dot'+(st.done[i]?' done':i===st.part?' active':'');});}
+function getIco(i){if(st.done[i])return'\u2705';if(i===st.part)return'\uD83D\uDCD6';if(i>0&&!st.done[i-1])return'\uD83D\uDD12';return'\uD83D\uDCCB';}
+function buildList(){const list=document.getElementById('pl');list.innerHTML='';DATA.parts.forEach((p,i)=>{const li=document.createElement('li');const locked=i>0&&!st.done[i-1];li.innerHTML='<button class="pb" id="pb'+i+'" '+(locked?'disabled':'')+' data-i="'+i+'"><span class="pico" id="pi'+i+'">'+getIco(i)+'</span><div class="pinfo"><div class="pname">Ph\u1ea7n '+p.part+'</div><div class="prng">C\u00e2u '+p.range+' \u2022 '+p.questions.length+' c\u00e2u</div></div></button><div class="mprog"><div class="mbar" id="mb'+i+'" style="width:0%"></div></div>';list.appendChild(li);});list.querySelectorAll('.pb').forEach(b=>b.addEventListener('click',()=>{go(+b.dataset.i);closeSB();}));updList();}
+function updList(){DATA.parts.forEach((_,i)=>{const b=document.getElementById('pb'+i);if(!b)return;b.disabled=i>0&&!st.done[i-1];b.className='pb'+(i===st.part?' act':'');document.getElementById('pi'+i).textContent=getIco(i);const pct=Math.round(st.ans[i].filter(a=>a.a).length/st.ans[i].length*100);document.getElementById('mb'+i).style.width=pct+'%';});updDots();}
+function go(idx){st.part=idx;st.q=0;st.show=false;const p=DATA.parts[idx];document.getElementById('ptitle').textContent='Ph\u1ea7n '+p.part;document.getElementById('psub').textContent='C\u00e2u '+p.range+' | '+p.questions.length+' c\u00e2u h\u1ecfi';document.getElementById('cel').classList.remove('show');updList();rq();}
+function rq(){const p=DATA.parts[st.part],ord=st.ord[st.part],qi=ord[st.q],q=p.questions[qi],pa=st.ans[st.part],a=pa[qi],tot=p.questions.length,cur=st.q+1;document.getElementById('ptxt').textContent='C\u00e2u '+cur+' / '+tot;const dn=pa.filter(x=>x.a).length;document.getElementById('pans').textContent='\u0110\u00e3 tr\u1ea3 l\u1eddi: '+dn;document.getElementById('pbar').style.width=(dn/tot*100)+'%';document.getElementById('qnum').textContent='C\u00e2u '+q.id;const badge=document.getElementById('qbadge');if(q.type==='multiple_choice'){badge.textContent='Tr\u1eafc nghi\u1ec7m';badge.className='qb mc';}else{badge.textContent='\u0110\u00fang / Sai';badge.className='qb tf';}document.getElementById('qtxt').textContent=q.question;const rev=document.getElementById('arev'),revt=document.getElementById('arevt');rev.classList.toggle('show',st.show);if(q.type==='multiple_choice'){const ck=q.correct_answer;revt.textContent='\u0110\u00e1p \u00e1n \u0111\u00fang: '+ck.toUpperCase()+'. '+q.options[ck];}else{revt.textContent='\u0110\u00e1p \u00e1n \u0111\u00fang: '+q.correct_answer;}const con=document.getElementById('opts');con.innerHTML='';if(q.type==='multiple_choice'){const g=document.createElement('div');g.className='og';Object.entries(q.options).forEach(([k,v])=>{const b=document.createElement('button');b.className='ob';if(a.a)b.disabled=true;b.innerHTML='<span class="ok">'+k.toUpperCase()+'</span><span>'+v+'</span>';if(a.a){if(k===q.correct_answer)b.classList.add('hc');if(a.ch===k)b.classList.add(a.ok?'correct':'wrong');}b.addEventListener('click',()=>pick(k,q));g.appendChild(b);});con.appendChild(g);}else{const g=document.createElement('div');g.className='tg';['\u0110\u00fang','Sai'].forEach(v=>{const b=document.createElement('button');b.className='tb';b.innerHTML='<span class="tbi">'+(v==='\u0110\u00fang'?'\u2714\ufe0f':'\u2716\ufe0f')+'</span><span>'+v+'</span>';if(a.a)b.disabled=true;if(a.a){if(v===q.correct_answer)b.classList.add('hc');if(a.ch===v)b.classList.add(a.ok?'correct':'wrong');}b.addEventListener('click',()=>pick(v,q));g.appendChild(b);});con.appendChild(g);}const fb=document.getElementById('fb');fb.className='fb';if(a.a){fb.classList.add('show',a.ok?'ok2':'no');fb.textContent=a.ok?'\u2705 Ch\u00ednh x\u00e1c!':'\u274c Ch\u01b0a \u0111\u00fang r\u1ed3i!';}document.getElementById('bprev').disabled=st.q===0;document.getElementById('bnext').disabled=st.q>=tot-1;document.getElementById('bans').textContent=st.show?'\uD83D\uDE48 \u1ea8n \u0111\u00e1p \u00e1n':'\uD83D\uDC41 Xem \u0111\u00e1p \u00e1n';const bd=document.getElementById('bdone');bd.disabled=st.done[st.part];bd.textContent=st.done[st.part]?'\u2705 \u0110\u00e3 thu\u1ed9c':'\u2705 \u0110\u00e3 thu\u1ed9c ph\u1ea7n n\u00e0y';if(dn===tot&&!st.done[st.part]){document.getElementById('cel').classList.add('show');document.getElementById('celtxt').textContent=st.part===DATA.parts.length-1?'B\u1ea1n \u0111\u00e3 ho\u00e0n th\u00e0nh t\u1ea5t c\u1ea3!':'B\u1ea5m &quot;\u0110\u00e3 thu\u1ed9c&quot; \u0111\u1ec3 m\u1edf kh\u00f3a ph\u1ea7n ti\u1ebfp theo.';bd.classList.add('pulse');setTimeout(()=>bd.classList.remove('pulse'),700);}}
+function pick(ch,q){const qi=st.ord[st.part][st.q],a=st.ans[st.part][qi];if(a.a)return;a.a=true;a.ch=ch;a.ok=ch===q.correct_answer;st.show=true;updList();rq();}
+function shuf(){const ord=st.ord[st.part];for(let i=ord.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]];}st.q=0;st.show=false;rq();const b=document.getElementById('bsh');b.textContent='\u0110\u00e3 x\u00e1o!';setTimeout(()=>{b.innerHTML='\uD83D\uDD00 X\u00e1o tr\u1ed9n';},1200);}
+function markDone(){if(st.done[st.part])return;st.done[st.part]=true;document.getElementById('cel').classList.remove('show');updList();rq();const nx=st.part+1;if(nx<DATA.parts.length)setTimeout(()=>go(nx),600);}
+function nxt(){const t=DATA.parts[st.part].questions.length;if(st.q<t-1){st.q++;st.show=false;rq();}}
+function prv(){if(st.q>0){st.q--;st.show=false;rq();}}
+function togAns(){st.show=!st.show;rq();}
+function closeSB(){document.getElementById('sb').classList.remove('open');document.getElementById('sbo').classList.remove('show');}
+document.getElementById('mnu').addEventListener('click',()=>{document.getElementById('sb').classList.toggle('open');document.getElementById('sbo').classList.toggle('show');});
+document.getElementById('sbo').addEventListener('click',closeSB);
+document.getElementById('bprev').addEventListener('click',prv);
+document.getElementById('bnext').addEventListener('click',nxt);
+document.getElementById('bans').addEventListener('click',togAns);
+document.getElementById('bsh').addEventListener('click',shuf);
+document.getElementById('bdone').addEventListener('click',markDone);
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();nxt();}if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();prv();}if(e.key==='a'||e.key==='A')togAns();});
+init();
+</script>
+</body>
+</html>
